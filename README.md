@@ -44,6 +44,22 @@ Für jeden Permission-Namen:
 3. Kopiert die Datei nach `/etc/sudoers.d/<name>`
 4. Setzt `chown root:root` und `chmod 440` — beides zwingende Voraussetzungen damit `sudo` die Datei akzeptiert
 
+## Hinweis für Entwickler: Reset für Integrationstests
+
+Um `setup.sh` sauber von vorne zu testen, müssen beide Seiten zurückgesetzt werden.
+
+**Lokal:**
+```bash
+rm ~/.ssh/sudoers_admin ~/.ssh/sudoers_admin.pub
+```
+
+**Auf dem Server:**
+```bash
+sudo rm -rf /usr/local/lib/permissions_for_claude
+sudo sed -i '/sudoers_admin/d' /root/.ssh/authorized_keys
+sudo rm -f /etc/sudoers.d/TO_*
+```
+
 ## Tests
 
 ```bash
