@@ -21,10 +21,16 @@ fi
 
 PUBLIC_KEY=$(cat "$KEY.pub")
 
-SCRIPT_DIR=$(dirname "$(realpath "$0")")
-
-sed \
-    -e "s|{{REPO_URL}}|$REPO_URL|g" \
-    -e "s|{{PUBLIC_KEY}}|$PUBLIC_KEY|g" \
-    "$SCRIPT_DIR/libs/server_setup.sh" \
-    | ssh -t "master@$SERVER" "sudo bash"
+ssh -t "master@$SERVER" "sudo bash -c '
+    apt-get install -y git
+    echo \"***********************************************\"
+    echo \"* Der Server verbindet sich jetzt mit GitHub. *\"
+    echo \"* Falls gefragt: Fingerprint mit yes bestaetigen *\"
+    echo \"***********************************************\"
+    git clone $REPO_URL /usr/local/lib/permissions_for_claude || git -C /usr/local/lib/permissions_for_claude pull
+    chmod 700 /usr/local/lib/permissions_for_claude/libs/activate_rule.sh
+    chown root:root /usr/local/lib/permissions_for_claude/libs/activate_rule.sh
+    mkdir -p /root/.ssh
+    grep -qF \"sudoers_admin\" /root/.ssh/authorized_keys 2>/dev/null || \
+        echo \"command=\\\"/usr/local/lib/permissions_for_claude/libs/activate_rule.sh \$SSH_ORIGINAL_COMMAND\\\",no-pty,no-port-forwarding $PUBLIC_KEY\" >> /root/.ssh/authorized_keys
+'"
