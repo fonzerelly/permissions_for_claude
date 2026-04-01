@@ -32,5 +32,5 @@ ssh -t "master@$SERVER" "sudo bash -c '
     chown root:root /usr/local/lib/permissions_for_claude/libs/activate_rule.sh
     mkdir -p /root/.ssh
     grep -qF \"sudoers_admin\" /root/.ssh/authorized_keys 2>/dev/null || \
-        echo \"command=\\\"/usr/local/lib/permissions_for_claude/libs/activate_rule.sh \$SSH_ORIGINAL_COMMAND\\\",no-pty,no-port-forwarding $PUBLIC_KEY\" >> /root/.ssh/authorized_keys
+        echo \"command=\\\"/usr/local/lib/permissions_for_claude/libs/activate_rule.sh \\\$SSH_ORIGINAL_COMMAND\\\",no-pty,no-port-forwarding $PUBLIC_KEY\" >> /root/.ssh/authorized_keys
 '"

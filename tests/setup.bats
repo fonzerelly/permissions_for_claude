@@ -38,7 +38,7 @@ teardown() {
     run /app/setup.sh
     [ "$status" -eq 0 ]
     PUBLIC_KEY=$(cat "$HOME/.ssh/sudoers_admin.pub")
-    grep -q "command=.*activate_rule.sh" "$SSH_LOG"
+    grep -q 'command=.*activate_rule.sh.*\$SSH_ORIGINAL_COMMAND' "$SSH_LOG"
     grep -q "no-pty,no-port-forwarding" "$SSH_LOG"
     grep -qF "$PUBLIC_KEY" "$SSH_LOG"
 }
