@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Goal
 
-A bash script that grants Claude temporary, scoped SSH access to the home server (`192.168.178.60`). The script and all tests run inside Docker containers orchestrated via `docker-compose`.
+A bash script that grants Claude temporary, scoped SSH access to the home server (`<deine-server-ip>`). The script and all tests run inside Docker containers orchestrated via `docker-compose`.
 
 ## Development Workflow (TDD)
 
@@ -26,23 +26,24 @@ To run a single test (once the test framework is established):
 docker compose run --rm tests bash -c "<test-runner-command> <test-name>"
 ```
 
-## Architecture (intended)
+## Architecture
 
 ```
 permissions_for_claude/
-  grant_access.sh       ← main script (creates temporary SSH access)
-  revoke_access.sh      ← cleanup / revocation logic
+  allow_claude.sh       ← server-side script (installs sudoers files)
+  setup.sh              ← one-time client-side setup (keys + server config)
+  permissions/          ← sudoers snippets (one file per permission)
   tests/
-    ...                 ← unit tests (bash-based, e.g. bats)
+    grant.bats          ← tests for allow_claude.sh
+    setup.bats          ← tests for setup.sh
   docker-compose.yml    ← spins up test container
   Dockerfile            ← test environment (bats + dependencies)
-  doc.md                ← running log of decisions and what each function does
+  README.md             ← documentation
 ```
 
 ## Test Framework
 
 Tests use **bats** (Bash Automated Testing System) running inside Docker. The `docker-compose.yml` service exits with the test suite's exit code so CI can detect failures.
 
-## doc.md Protocol
-
-Every new function or behaviour must be documented in `doc.md` — describe what it does concretely, not just its name.
+## Tests
+To run tests use run-tests.sh and extend it if necessary.
