@@ -15,6 +15,16 @@ Laptop                          Server
 
 Der `sudoers_admin`-Key darf auf dem Server ausschließlich `activate_rule.sh` aufrufen — keine Shell, kein Port-Forwarding.
 
+## Voraussetzung: claude-User auf dem Server anlegen
+
+Einmalig manuell auf dem Server ausführen:
+
+```bash
+sudo adduser claude
+```
+
+Der `claude`-User ist der User dem die Sudo-Rechte über die Permissions-Dateien gewährt werden.
+
 ## Einmaliges Setup
 
 ```bash
