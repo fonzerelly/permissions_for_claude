@@ -7,7 +7,7 @@ setup() {
 
     # Mock ssh, scp und git: tun nichts, damit Unit-Tests ohne Server laufen
     mkdir -p "$TMPDIR/bin"
-    printf '#!/bin/bash\necho "$@" >> "%s"\nexit 0\n' "$SSH_LOG" > "$TMPDIR/bin/ssh"
+    printf '#!/bin/bash\necho "$@" >> "%s"\ncat >> "%s"\nexit 0\n' "$SSH_LOG" "$SSH_LOG" > "$TMPDIR/bin/ssh"
     printf '#!/bin/bash\nexit 0\n' > "$TMPDIR/bin/scp"
     printf '#!/bin/bash\necho "https://github.com/fonzerelly/permissions_for_claude.git"\nexit 0\n' > "$TMPDIR/bin/git"
     chmod +x "$TMPDIR/bin/ssh" "$TMPDIR/bin/scp" "$TMPDIR/bin/git"
