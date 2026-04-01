@@ -8,12 +8,12 @@ Bash-Skripte die Claude temporären, eingeschränkten SSH-Zugang zum Home-Server
 Laptop                          Server
   setup.sh  ──SSH als master──▶  git clone + authorized_keys eintragen
   
-  ssh -i ~/.ssh/sudoers_admin \
+  ssh -i ~/.ssh/sudoers_allow \
       root@$SERVER TO_WHOAMI  ──▶  activate_rule.sh TO_WHOAMI
                                       └─ installiert /etc/sudoers.d/TO_WHOAMI
 ```
 
-Der `sudoers_admin`-Key darf auf dem Server ausschließlich `activate_rule.sh` aufrufen — keine Shell, kein Port-Forwarding.
+Der `sudoers_allow`-Key darf auf dem Server ausschließlich `activate_rule.sh` aufrufen — keine Shell, kein Port-Forwarding.
 
 ## Voraussetzung: claude-User auf dem Server anlegen
 
@@ -34,14 +34,14 @@ SERVER=<deine-server-ip> ./setup.sh
 `setup.sh` liest die Repo-URL automatisch aus `git remote get-url origin`.
 
 Was es tut:
-1. Erzeugt `~/.ssh/sudoers_admin` (ed25519) — überschreibt einen vorhandenen Key nie
+1. Erzeugt `~/.ssh/sudoers_allow` (ed25519) — überschreibt einen vorhandenen Key nie
 2. Klont das Repo auf dem Server nach `/usr/local/lib/permissions_for_claude`
 3. Trägt den Public Key in `/root/.ssh/authorized_keys` ein mit `command=`-Einschränkung (idempotent)
 
 ## Nutzung
 
 ```bash
-ssh -i ~/.ssh/sudoers_admin root@$SERVER TO_WHOAMI
+ssh -i ~/.ssh/sudoers_allow root@$SERVER TO_WHOAMI
 ```
 
 ## activate_rule.sh
@@ -60,14 +60,14 @@ Um `setup.sh` sauber von vorne zu testen, müssen beide Seiten zurückgesetzt we
 
 **Lokal:**
 ```bash
-rm ~/.ssh/sudoers_admin ~/.ssh/sudoers_admin.pub
+rm ~/.ssh/sudoers_allow ~/.ssh/sudoers_allow.pub
 rm ~/.ssh/sudoers_revoke ~/.ssh/sudoers_revoke.pub
 ```
 
 **Auf dem Server:**
 ```bash
 sudo rm -rf /usr/local/lib/permissions_for_claude
-sudo sed -i '/sudoers_admin/d' /root/.ssh/authorized_keys
+sudo sed -i '/sudoers_allow/d' /root/.ssh/authorized_keys
 sudo sed -i '/sudoers_revoke/d' /root/.ssh/authorized_keys
 sudo rm -f /etc/sudoers.d/TO_*
 ```

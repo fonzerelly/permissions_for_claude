@@ -20,11 +20,11 @@ teardown() {
     rm -rf "$TMPDIR"
 }
 
-@test "setup.sh erzeugt sudoers_admin Key wenn er nicht existiert" {
+@test "setup.sh erzeugt sudoers_allow Key wenn er nicht existiert" {
     run /app/setup.sh
     [ "$status" -eq 0 ]
-    [ -f "$HOME/.ssh/sudoers_admin" ]
-    [ -f "$HOME/.ssh/sudoers_admin.pub" ]
+    [ -f "$HOME/.ssh/sudoers_allow" ]
+    [ -f "$HOME/.ssh/sudoers_allow.pub" ]
 }
 
 @test "setup.sh gibt Fehlermeldung wenn SERVER nicht gesetzt" {
@@ -37,7 +37,7 @@ teardown() {
 @test "setup.sh trägt authorized_keys Eintrag mit command=-Einschränkung ein" {
     run /app/setup.sh
     [ "$status" -eq 0 ]
-    PUBLIC_KEY=$(cat "$HOME/.ssh/sudoers_admin.pub")
+    PUBLIC_KEY=$(cat "$HOME/.ssh/sudoers_allow.pub")
     grep -q 'command=.*activate_rule.sh.*\$SSH_ORIGINAL_COMMAND' "$SSH_LOG"
     grep -q "no-pty,no-port-forwarding" "$SSH_LOG"
     grep -qF "$PUBLIC_KEY" "$SSH_LOG"
@@ -61,10 +61,10 @@ teardown() {
 @test "setup.sh überschreibt vorhandenen Key nicht" {
     mkdir -p "$HOME/.ssh"
     chmod 700 "$HOME/.ssh"
-    ssh-keygen -t ed25519 -f "$HOME/.ssh/sudoers_admin" -C "original" -N ""
-    ORIGINAL=$(cat "$HOME/.ssh/sudoers_admin.pub")
+    ssh-keygen -t ed25519 -f "$HOME/.ssh/sudoers_allow" -C "original" -N ""
+    ORIGINAL=$(cat "$HOME/.ssh/sudoers_allow.pub")
 
     run /app/setup.sh
     [ "$status" -eq 0 ]
-    [ "$(cat "$HOME/.ssh/sudoers_admin.pub")" = "$ORIGINAL" ]
+    [ "$(cat "$HOME/.ssh/sudoers_allow.pub")" = "$ORIGINAL" ]
 }

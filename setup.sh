@@ -8,12 +8,12 @@ fi
 
 REPO_URL=$(git remote get-url origin | sed 's|git@github.com:|https://github.com/|')
 
-KEY="$HOME/.ssh/sudoers_admin"
+KEY="$HOME/.ssh/sudoers_allow"
 
 if [ ! -f "$KEY" ]; then
     mkdir -p "$HOME/.ssh"
     chmod 700 "$HOME/.ssh"
-    ssh-keygen -t ed25519 -f "$KEY" -C "sudoers_admin" -N ""
+    ssh-keygen -t ed25519 -f "$KEY" -C "sudoers_allow" -N ""
     echo "Key erzeugt: $KEY"
 else
     echo "Key bereits vorhanden, wird nicht überschrieben: $KEY"
@@ -44,7 +44,7 @@ ssh -t "master@$SERVER" "sudo bash -c '
     chown root:root /usr/local/lib/permissions_for_claude/libs/activate_rule.sh
     chown root:root /usr/local/lib/permissions_for_claude/libs/deactivate_rule.sh
     mkdir -p /root/.ssh
-    grep -qF \"sudoers_admin\" /root/.ssh/authorized_keys 2>/dev/null || \
+    grep -qF \"sudoers_allow\" /root/.ssh/authorized_keys 2>/dev/null || \
         echo \"command=\\\"/usr/local/lib/permissions_for_claude/libs/activate_rule.sh \\\$SSH_ORIGINAL_COMMAND\\\",no-pty,no-port-forwarding $PUBLIC_KEY\" >> /root/.ssh/authorized_keys
     grep -qF \"sudoers_revoke\" /root/.ssh/authorized_keys 2>/dev/null || \
         echo \"command=\\\"/usr/local/lib/permissions_for_claude/libs/deactivate_rule.sh \\\$SSH_ORIGINAL_COMMAND\\\",no-pty,no-port-forwarding $PUBLIC_REVOKE_KEY\" >> /root/.ssh/authorized_keys

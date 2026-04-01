@@ -24,10 +24,10 @@ teardown() {
     [ "$output" = "Fehler: Umgebungsvariable SERVER ist nicht gesetzt (z.B. SERVER=<deine-server-ip>)" ]
 }
 
-@test "allow_claude ruft ssh mit sudoers_admin Key auf" {
+@test "allow_claude ruft ssh mit sudoers_allow Key auf" {
     run /app/allow_claude TO_WHOAMI
     [ "$status" -eq 0 ]
-    grep -q "sudoers_admin" "$SSH_LOG"
+    grep -q "sudoers_allow" "$SSH_LOG"
 }
 
 @test "allow_claude übergibt Permission-Namen an activate_rule.sh" {
