@@ -54,6 +54,11 @@ Für jeden Permission-Namen:
 3. Kopiert die Datei nach `/etc/sudoers.d/<name>`
 4. Setzt `chown root:root` und `chmod 440` — beides zwingende Voraussetzungen damit `sudo` die Datei akzeptiert
 
+## Eigene Permissions erstellen
+
+Neue Permission-Dateien können unter `permissions/` abgelegt werden. Zur Syntax der Sudoers-Datei:
+https://heshandharmasena.medium.com/explain-sudoers-file-configuration-in-linux-1fe00f4d6159
+
 ## Hinweis für Entwickler: Reset für Integrationstests
 
 Um `setup.sh` sauber von vorne zu testen, müssen beide Seiten zurückgesetzt werden.
