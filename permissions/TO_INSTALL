@@ -1,1 +1,1 @@
-claude ALL=(ALL) NOPASSWD: /usr/bin/apt, /usr/bin/apt-get
+claude ALL=(ALL) NOPASSWD: /usr/bin/apt, /usr/bin/apt-get, /usr/bin/dpkg, /usr/bin/install, /usr/bin/tee, /bin/mkdir, /usr/bin/gpg, /usr/bin/curl, /usr/bin/wget, /usr/bin/systemctl
