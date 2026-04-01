@@ -17,27 +17,27 @@ teardown() {
     rm -rf "$TMPDIR"
 }
 
-@test "grant.sh gibt Fehlermeldung wenn SERVER nicht gesetzt" {
+@test "allow_claude gibt Fehlermeldung wenn SERVER nicht gesetzt" {
     unset SERVER
-    run /app/grant.sh TO_WHOAMI
+    run /app/allow_claude TO_WHOAMI
     [ "$status" -ne 0 ]
     [ "$output" = "Fehler: Umgebungsvariable SERVER ist nicht gesetzt (z.B. SERVER=<deine-server-ip>)" ]
 }
 
-@test "grant.sh ruft ssh mit sudoers_admin Key auf" {
-    run /app/grant.sh TO_WHOAMI
+@test "allow_claude ruft ssh mit sudoers_admin Key auf" {
+    run /app/allow_claude TO_WHOAMI
     [ "$status" -eq 0 ]
     grep -q "sudoers_admin" "$SSH_LOG"
 }
 
-@test "grant.sh übergibt Permission-Namen an activate_rule.sh" {
-    run /app/grant.sh TO_WHOAMI
+@test "allow_claude übergibt Permission-Namen an activate_rule.sh" {
+    run /app/allow_claude TO_WHOAMI
     [ "$status" -eq 0 ]
     grep -q "TO_WHOAMI" "$SSH_LOG"
 }
 
-@test "grant.sh übergibt mehrere Permissions" {
-    run /app/grant.sh TO_WHOAMI TO_ID
+@test "allow_claude übergibt mehrere Permissions" {
+    run /app/allow_claude TO_WHOAMI TO_ID
     [ "$status" -eq 0 ]
     grep -q "TO_WHOAMI" "$SSH_LOG"
     grep -q "TO_ID" "$SSH_LOG"
