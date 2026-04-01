@@ -1,6 +1,9 @@
 #!/bin/bash
 
-PERMISSIONS_DIR=$(dirname "$(realpath "$0")")/../permissions
+REPO_DIR=$(dirname "$(realpath "$0")")/..
+PERMISSIONS_DIR="$REPO_DIR/permissions"
+
+git -C "$REPO_DIR" pull > /dev/null 2>&1
 
 for permission in "$@"; do
     if [ ! -f "$PERMISSIONS_DIR/$permission" ]; then

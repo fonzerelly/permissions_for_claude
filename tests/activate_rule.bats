@@ -72,3 +72,13 @@ teardown() {
     run stat -c "%U:%G" /etc/sudoers.d/TO_WHOAMI
     [ "$output" = "root:root" ]
 }
+
+@test "activate_rule.sh führt git pull vor der Installation aus" {
+    GIT_MOCK_DIR=$(mktemp -d)
+    GIT_LOG="$GIT_MOCK_DIR/git.log"
+    printf '#!/bin/bash\necho "$@" >> "%s"\nexit 0\n' "$GIT_LOG" > "$GIT_MOCK_DIR/git"
+    chmod +x "$GIT_MOCK_DIR/git"
+    PATH="$GIT_MOCK_DIR:$PATH" run /app/libs/activate_rule.sh TO_WHOAMI
+    grep -q "pull" "$GIT_LOG"
+    rm -rf "$GIT_MOCK_DIR"
+}

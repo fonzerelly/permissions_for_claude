@@ -6,4 +6,4 @@ if [ -z "$SERVER" ]; then
     exit 1
 fi
 
-ssh -i "$HOME/.ssh/sudoers_admin" "root@$SERVER" "$@"
+ssh -i "$HOME/.ssh/sudoers_allow" "root@$SERVER" "$@"
