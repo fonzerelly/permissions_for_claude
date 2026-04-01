@@ -30,7 +30,7 @@ docker compose run --rm tests bash -c "<test-runner-command> <test-name>"
 
 ```
 permissions_for_claude/
-  activate_rule.sh       ← server-side script (installs sudoers files)
+  libs/activate_rule.sh       ← server-side script (installs sudoers files)
   setup.sh              ← one-time client-side setup (keys + server config)
   permissions/          ← sudoers snippets (one file per permission)
   tests/
