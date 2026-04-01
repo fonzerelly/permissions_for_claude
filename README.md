@@ -51,12 +51,14 @@ Um `setup.sh` sauber von vorne zu testen, müssen beide Seiten zurückgesetzt we
 **Lokal:**
 ```bash
 rm ~/.ssh/sudoers_admin ~/.ssh/sudoers_admin.pub
+rm ~/.ssh/sudoers_revoke ~/.ssh/sudoers_revoke.pub
 ```
 
 **Auf dem Server:**
 ```bash
 sudo rm -rf /usr/local/lib/permissions_for_claude
 sudo sed -i '/sudoers_admin/d' /root/.ssh/authorized_keys
+sudo sed -i '/sudoers_revoke/d' /root/.ssh/authorized_keys
 sudo rm -f /etc/sudoers.d/TO_*
 ```
 
