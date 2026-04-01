@@ -8,6 +8,19 @@ teardown() {
     rm -f /etc/sudoers.d/TO_*
 }
 
+@test "allow_claude.sh findet permissions relativ zu seiner eigenen Position" {
+    TMPDIR=$(mktemp -d)
+    cp /app/allow_claude.sh "$TMPDIR/"
+    mkdir "$TMPDIR/permissions"
+    # TO_TMPONLY existiert nur im tmpdir, nicht in /app/permissions/
+    # => schlägt fehl wenn allow_claude.sh den Pfad hardcoded hat
+    echo "claude ALL=(ALL) NOPASSWD: /usr/bin/whoami" > "$TMPDIR/permissions/TO_TMPONLY"
+    run "$TMPDIR/allow_claude.sh" TO_TMPONLY
+    rm -rf "$TMPDIR"
+    [ "$status" -eq 0 ]
+    [ -f /etc/sudoers.d/TO_TMPONLY ]
+}
+
 @test "allow_claude.sh TO_WHOAMI besteht die visudo-Syntaxprüfung" {
     run /app/allow_claude.sh TO_WHOAMI
     [ "$status" -eq 0 ]
