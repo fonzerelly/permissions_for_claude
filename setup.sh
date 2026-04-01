@@ -32,6 +32,12 @@ fi
 
 PUBLIC_REVOKE_KEY=$(cat "$REVOKE_KEY.pub")
 
+SCRIPT_DIR=$(dirname "$(realpath "$0")")
+for cmd in allow_claude revoke_claude; do
+    ln -sf "$SCRIPT_DIR/$cmd" "/usr/local/bin/$cmd"
+    echo "Verknüpft: /usr/local/bin/$cmd -> $SCRIPT_DIR/$cmd"
+done
+
 ssh -t "master@$SERVER" "sudo bash -c '
     apt-get install -y git
     echo \"***********************************************\"
