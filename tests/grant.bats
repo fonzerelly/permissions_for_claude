@@ -1,5 +1,13 @@
 #!/usr/bin/env bats
 
+setup() {
+    rm -f /etc/sudoers.d/TO_*
+}
+
+teardown() {
+    rm -f /etc/sudoers.d/TO_*
+}
+
 @test "allow_claude.sh TO_WHOAMI besteht die visudo-Syntaxprüfung" {
     run /app/allow_claude.sh TO_WHOAMI
     [ "$status" -eq 0 ]
@@ -15,7 +23,38 @@
     [ "$status" -ne 0 ]
 }
 
+@test "allow_claude.sh TO_UNKNOWN gibt eine sprechende Fehlermeldung aus" {
+    run /app/allow_claude.sh TO_UNKNOWN
+    [ "$status" -ne 0 ]
+    [ "$output" = "Unbekannte Permission: TO_UNKNOWN" ]
+}
+
+@test "allow_claude.sh TO_UNKNOWN TO_UPTIME_CORRUPTED schlägt fehl" {
+    run /app/allow_claude.sh TO_UNKNOWN TO_UPTIME_CORRUPTED
+    [ "$status" -ne 0 ]
+}
+
 @test "allow_claude.sh mit TO_WHOAMI und TO_UPTIME_CORRUPTED schlägt fehl" {
     run /app/allow_claude.sh TO_WHOAMI TO_UPTIME_CORRUPTED
     [ "$status" -ne 0 ]
+}
+
+@test "allow_claude.sh TO_WHOAMI kopiert die Datei nach /etc/sudoers.d/" {
+    run /app/allow_claude.sh TO_WHOAMI
+    [ "$status" -eq 0 ]
+    [ -f /etc/sudoers.d/TO_WHOAMI ]
+}
+
+@test "allow_claude.sh TO_WHOAMI setzt chmod 440" {
+    run /app/allow_claude.sh TO_WHOAMI
+    [ "$status" -eq 0 ]
+    run stat -c "%a" /etc/sudoers.d/TO_WHOAMI
+    [ "$output" = "440" ]
+}
+
+@test "allow_claude.sh TO_WHOAMI setzt owner root:root" {
+    run /app/allow_claude.sh TO_WHOAMI
+    [ "$status" -eq 0 ]
+    run stat -c "%U:%G" /etc/sudoers.d/TO_WHOAMI
+    [ "$output" = "root:root" ]
 }

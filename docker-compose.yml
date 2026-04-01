@@ -3,7 +3,4 @@ services:
     build: .
     volumes:
       - .:/app
-      - ~/.ssh:/root/.ssh:ro
-    environment:
-      - SERVER=${SERVER}
     command: /app/tests/grant.bats
