@@ -6,7 +6,7 @@ if [ -z "$SERVER" ]; then
     exit 1
 fi
 
-REPO_URL=$(git remote get-url origin)
+REPO_URL=$(git remote get-url origin | sed 's|git@github.com:|https://github.com/|')
 
 KEY="$HOME/.ssh/sudoers_admin"
 
@@ -22,6 +22,11 @@ fi
 PUBLIC_KEY=$(cat "$KEY.pub")
 
 ssh -t "master@$SERVER" "sudo bash -c '
+    apt-get install -y git
+    echo \"***********************************************\"
+    echo \"* Der Server verbindet sich jetzt mit GitHub. *\"
+    echo \"* Falls gefragt: Fingerprint mit yes bestaetigen *\"
+    echo \"***********************************************\"
     git clone $REPO_URL /usr/local/lib/permissions_for_claude || git -C /usr/local/lib/permissions_for_claude pull
     chmod 700 /usr/local/lib/permissions_for_claude/allow_claude.sh
     chown root:root /usr/local/lib/permissions_for_claude/allow_claude.sh
