@@ -1,1 +1,1 @@
-claude ALL=(ALL) NOPASSWD: /usr/bin/tee, /bin/mkdir, /usr/bin/systemctl
+claude ALL=(ALL) NOPASSWD: /usr/bin/tee, /bin/mkdir, /usr/bin/systemctl, /usr/bin/systemd-analyze
