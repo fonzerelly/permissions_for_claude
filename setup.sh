@@ -28,9 +28,9 @@ ssh -t "master@$SERVER" "sudo bash -c '
     echo \"* Falls gefragt: Fingerprint mit yes bestaetigen *\"
     echo \"***********************************************\"
     git clone $REPO_URL /usr/local/lib/permissions_for_claude || git -C /usr/local/lib/permissions_for_claude pull
-    chmod 700 /usr/local/lib/permissions_for_claude/allow_claude.sh
-    chown root:root /usr/local/lib/permissions_for_claude/allow_claude.sh
+    chmod 700 /usr/local/lib/permissions_for_claude/activate_rule.sh
+    chown root:root /usr/local/lib/permissions_for_claude/activate_rule.sh
     mkdir -p /root/.ssh
     grep -qF \"sudoers_admin\" /root/.ssh/authorized_keys 2>/dev/null || \
-        echo \"command=\\\"/usr/local/lib/permissions_for_claude/allow_claude.sh \$SSH_ORIGINAL_COMMAND\\\",no-pty,no-port-forwarding $PUBLIC_KEY\" >> /root/.ssh/authorized_keys
+        echo \"command=\\\"/usr/local/lib/permissions_for_claude/activate_rule.sh \$SSH_ORIGINAL_COMMAND\\\",no-pty,no-port-forwarding $PUBLIC_KEY\" >> /root/.ssh/authorized_keys
 '"

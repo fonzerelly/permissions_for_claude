@@ -9,11 +9,11 @@ Laptop                          Server
   setup.sh  ──SSH als master──▶  git clone + authorized_keys eintragen
   
   ssh -i ~/.ssh/sudoers_admin \
-      root@$SERVER TO_WHOAMI  ──▶  allow_claude.sh TO_WHOAMI
+      root@$SERVER TO_WHOAMI  ──▶  activate_rule.sh TO_WHOAMI
                                       └─ installiert /etc/sudoers.d/TO_WHOAMI
 ```
 
-Der `sudoers_admin`-Key darf auf dem Server ausschließlich `allow_claude.sh` aufrufen — keine Shell, kein Port-Forwarding.
+Der `sudoers_admin`-Key darf auf dem Server ausschließlich `activate_rule.sh` aufrufen — keine Shell, kein Port-Forwarding.
 
 ## Einmaliges Setup
 
@@ -34,7 +34,7 @@ Was es tut:
 ssh -i ~/.ssh/sudoers_admin root@$SERVER TO_WHOAMI
 ```
 
-## allow_claude.sh
+## activate_rule.sh
 
 Nimmt einen oder mehrere Permission-Namen als Argumente entgegen (z.B. `TO_WHOAMI`).
 

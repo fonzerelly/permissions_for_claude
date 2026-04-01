@@ -30,11 +30,11 @@ docker compose run --rm tests bash -c "<test-runner-command> <test-name>"
 
 ```
 permissions_for_claude/
-  allow_claude.sh       ← server-side script (installs sudoers files)
+  activate_rule.sh       ← server-side script (installs sudoers files)
   setup.sh              ← one-time client-side setup (keys + server config)
   permissions/          ← sudoers snippets (one file per permission)
   tests/
-    grant.bats          ← tests for allow_claude.sh
+    activate_rule.bats  ← tests for activate_rule.sh
     setup.bats          ← tests for setup.sh
   docker-compose.yml    ← spins up test container
   Dockerfile            ← test environment (bats + dependencies)

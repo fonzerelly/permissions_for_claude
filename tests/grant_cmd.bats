@@ -30,7 +30,7 @@ teardown() {
     grep -q "sudoers_admin" "$SSH_LOG"
 }
 
-@test "grant.sh übergibt Permission-Namen an allow_claude.sh" {
+@test "grant.sh übergibt Permission-Namen an activate_rule.sh" {
     run /app/grant.sh TO_WHOAMI
     [ "$status" -eq 0 ]
     grep -q "TO_WHOAMI" "$SSH_LOG"
