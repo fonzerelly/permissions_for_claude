@@ -43,6 +43,21 @@ teardown() {
     grep -qF "$PUBLIC_KEY" "$SSH_LOG"
 }
 
+@test "setup.sh erzeugt sudoers_revoke Key wenn er nicht existiert" {
+    run /app/setup.sh
+    [ "$status" -eq 0 ]
+    [ -f "$HOME/.ssh/sudoers_revoke" ]
+    [ -f "$HOME/.ssh/sudoers_revoke.pub" ]
+}
+
+@test "setup.sh trägt authorized_keys Eintrag für revoke mit command=-Einschränkung ein" {
+    run /app/setup.sh
+    [ "$status" -eq 0 ]
+    PUBLIC_KEY=$(cat "$HOME/.ssh/sudoers_revoke.pub")
+    grep -q 'command=.*deactivate_rule.sh.*\$SSH_ORIGINAL_COMMAND' "$SSH_LOG"
+    grep -qF "$PUBLIC_KEY" "$SSH_LOG"
+}
+
 @test "setup.sh überschreibt vorhandenen Key nicht" {
     mkdir -p "$HOME/.ssh"
     chmod 700 "$HOME/.ssh"

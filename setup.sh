@@ -21,6 +21,17 @@ fi
 
 PUBLIC_KEY=$(cat "$KEY.pub")
 
+REVOKE_KEY="$HOME/.ssh/sudoers_revoke"
+
+if [ ! -f "$REVOKE_KEY" ]; then
+    ssh-keygen -t ed25519 -f "$REVOKE_KEY" -C "sudoers_revoke" -N ""
+    echo "Key erzeugt: $REVOKE_KEY"
+else
+    echo "Key bereits vorhanden, wird nicht überschrieben: $REVOKE_KEY"
+fi
+
+PUBLIC_REVOKE_KEY=$(cat "$REVOKE_KEY.pub")
+
 ssh -t "master@$SERVER" "sudo bash -c '
     apt-get install -y git
     echo \"***********************************************\"
@@ -29,8 +40,12 @@ ssh -t "master@$SERVER" "sudo bash -c '
     echo \"***********************************************\"
     git clone $REPO_URL /usr/local/lib/permissions_for_claude || git -C /usr/local/lib/permissions_for_claude pull
     chmod 700 /usr/local/lib/permissions_for_claude/libs/activate_rule.sh
+    chmod 700 /usr/local/lib/permissions_for_claude/libs/deactivate_rule.sh
     chown root:root /usr/local/lib/permissions_for_claude/libs/activate_rule.sh
+    chown root:root /usr/local/lib/permissions_for_claude/libs/deactivate_rule.sh
     mkdir -p /root/.ssh
     grep -qF \"sudoers_admin\" /root/.ssh/authorized_keys 2>/dev/null || \
         echo \"command=\\\"/usr/local/lib/permissions_for_claude/libs/activate_rule.sh \\\$SSH_ORIGINAL_COMMAND\\\",no-pty,no-port-forwarding $PUBLIC_KEY\" >> /root/.ssh/authorized_keys
+    grep -qF \"sudoers_revoke\" /root/.ssh/authorized_keys 2>/dev/null || \
+        echo \"command=\\\"/usr/local/lib/permissions_for_claude/libs/deactivate_rule.sh \\\$SSH_ORIGINAL_COMMAND\\\",no-pty,no-port-forwarding $PUBLIC_REVOKE_KEY\" >> /root/.ssh/authorized_keys
 '"
