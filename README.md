@@ -15,6 +15,24 @@ Laptop                          Server
 
 Der `sudoers_allow`-Key darf auf dem Server ausschließlich `activate_rule.sh` aufrufen — keine Shell, kein Port-Forwarding.
 
+## Installation
+
+```bash
+git clone https://github.com/fonzerelly/permissions_for_claude
+cd permissions_for_claude
+SERVER=<deine-server-ip> sudo ./setup.sh
+```
+
+`setup.sh` legt Symlinks für `allow_claude` und `revoke_claude` in `/usr/local/bin` an, sodass beide Befehle anschließend systemweit verfügbar sind.
+
+> **Hinweis:** Das geklonte Verzeichnis darf nicht verschoben oder gelöscht werden, solange die Symlinks aktiv sind. Vor einem Umzug bitte zuerst `sudo ./uninstall.sh` ausführen.
+
+Zum Deinstallieren:
+
+```bash
+sudo ./uninstall.sh
+```
+
 ## Voraussetzung: claude-User auf dem Server anlegen
 
 Einmalig manuell auf dem Server ausführen:
