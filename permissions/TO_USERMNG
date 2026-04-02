@@ -1,0 +1,1 @@
+claude ALL=(ALL) NOPASSWD: /usr/bin/mkdir, /usr/bin/chown, /usr/bin/chmod, /usr/sbin/groupadd, /usr/sbin/usermod
