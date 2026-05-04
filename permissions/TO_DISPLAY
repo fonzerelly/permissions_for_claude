@@ -1,0 +1,1 @@
+claude ALL=(ALL) NOPASSWD: /usr/bin/tee /etc/default/grub.d/disable-edp.cfg, /usr/bin/tee /var/lib/gdm3/.config/monitors.xml, /usr/sbin/update-grub, /bin/systemctl restart gdm.service
